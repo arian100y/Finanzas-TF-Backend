@@ -24,7 +24,7 @@ public class ClienteService  {
 
         return clientes;
     }
-    
+
     public void addCliente(Cliente cliente){
     perfilRepository.save(cliente.getPerfil());
     clienteRepository.save(cliente);

@@ -2,8 +2,11 @@ package com.finanzas.finanzasTF.controller;
 
 import ch.qos.logback.core.net.server.Client;
 import com.finanzas.finanzasTF.models.Cliente;
+import com.finanzas.finanzasTF.models.Negocio;
 import com.finanzas.finanzasTF.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +33,13 @@ public class ClienteController {
         clienteService.addCliente(cliente);
     }
 
-
+    @PostMapping("/login")
+    public ResponseEntity<Cliente> checkLogin(@RequestBody Negocio negocio){
+        Cliente temp = clienteService.verifyLogin(negocio);
+        if(temp!= null){
+            return new ResponseEntity<>(temp, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

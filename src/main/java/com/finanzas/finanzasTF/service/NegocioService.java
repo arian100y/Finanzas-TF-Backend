@@ -31,4 +31,25 @@ public class NegocioService {
 
         negocioRepository.save(negocio);
     }
+    public Negocio verifyLogin(Negocio negocio){
+        List<Negocio> allNegocios = negocioRepository.findAll();
+
+        for(Negocio nego:allNegocios){
+            if(nego.getRUC().equals(negocio.getRUC()) && nego.getPassword().equals(negocio.getPassword())){
+                return nego;
+            }
+        }
+
+        return null;
+    }
+    public Negocio getNegocioByCodigo(String codigo){
+        List<Negocio> allNegocios = negocioRepository.findAll();
+        for(Negocio nego:allNegocios){
+            if(nego.getCodigo().equals(codigo)){
+                return nego;
+            }
+        }
+
+        return null;
+    }
 }

@@ -34,12 +34,13 @@ public class ClienteController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Cliente> checkLogin(@RequestBody Negocio negocio){
+    public ResponseEntity<?> checkLogin(@RequestBody Negocio negocio){
         Cliente temp = clienteService.verifyLogin(negocio);
         if(temp!= null){
             return new ResponseEntity<>(temp, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            String response = clienteService.checkWhatIsWrong(negocio);
+            return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }
     }
 }

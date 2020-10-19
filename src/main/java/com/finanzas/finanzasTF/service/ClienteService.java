@@ -37,6 +37,7 @@ public class ClienteService  {
     public Cliente verifyLogin(Negocio negocio){
 
         Negocio nego = NegocioService.getNegocioByCodigo(negocio.getCodigo());
+
         if(nego!=null){
             for(Cliente client:nego.getClientes()){
                 if(client.getPerfil().getDNI().equals(negocio.getClientes().get(0).getPerfil().getDNI())){
@@ -49,5 +50,21 @@ public class ClienteService  {
         return null;
     }
 
+    public String checkWhatIsWrong(Negocio negocio){
+
+        Negocio nego = NegocioService.getNegocioByCodigo(negocio.getCodigo());
+
+        if(nego!=null){
+            for(Cliente client:nego.getClientes()){
+                if(client.getPerfil().getDNI().equals(negocio.getClientes().get(0).getPerfil().getDNI())){
+                    return "Codigo de negocio is wrong.";
+                }
+            }
+        }
+
+
+        return "DNI is wrong.";
+
+    }
 
 }

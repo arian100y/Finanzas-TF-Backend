@@ -35,6 +35,8 @@ public class NegocioController {
         System.out.println(negocio.getPerfil().getCorreo());
         negocioService.addNegocio(negocio);
     }
+
+
     @PostMapping("/login")
     public ResponseEntity<? > checkLogin(@RequestBody Negocio negocio) {
 

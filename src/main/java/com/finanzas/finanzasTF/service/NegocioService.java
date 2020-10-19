@@ -48,9 +48,9 @@ public class NegocioService {
         for(Negocio nego:allNegocios)
             if(nego.getCodigo() != null){
 
-            if(nego.getCodigo().equals(codigo)){
-                return nego;
-            }
+                if(nego.getCodigo().equals(codigo)){
+                    return nego;
+                }
         }
 
         return null;

@@ -7,6 +7,7 @@ import com.finanzas.finanzasTF.service.NegocioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.AbstractServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +36,18 @@ public class NegocioController {
         negocioService.addNegocio(negocio);
     }
     @PostMapping("/login")
-    public ResponseEntity<Negocio> checkLogin(@RequestBody Negocio negocio){
-        Negocio temp = negocioService.verifyLogin(negocio);
-        if(temp!= null){
-            return new ResponseEntity<>(temp,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<? > checkLogin(@RequestBody Negocio negocio) {
+
+        if (negocioService.check(negocio) == true) {
+            System.out.println("WTF");
+            Negocio temp = negocioService.verifyLogin(negocio);
+            return new ResponseEntity<>(temp, HttpStatus.OK);
+        } else {
+            System.out.println("TESTi");
+            String response = negocioService.checkWhatIsWrong(negocio);
+            return new ResponseEntity<String>(response, HttpStatus.NOT_FOUND);
         }
+
     }
+
 }

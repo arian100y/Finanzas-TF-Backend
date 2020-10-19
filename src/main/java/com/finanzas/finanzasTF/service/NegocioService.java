@@ -35,6 +35,7 @@ public class NegocioService {
         List<Negocio> allNegocios = negocioRepository.findAll();
 
         for(Negocio nego:allNegocios){
+            System.out.println("THIS I KNOW");
             if(nego.getRUC().equals(negocio.getRUC()) && nego.getPassword().equals(negocio.getPassword())){
                 return nego;
             }
@@ -44,12 +45,40 @@ public class NegocioService {
     }
     public Negocio getNegocioByCodigo(String codigo){
         List<Negocio> allNegocios = negocioRepository.findAll();
-        for(Negocio nego:allNegocios){
+        for(Negocio nego:allNegocios)
+            if(nego.getCodigo() != null){
+
             if(nego.getCodigo().equals(codigo)){
                 return nego;
             }
         }
 
         return null;
+    }
+    public Boolean check(Negocio negocio){
+        List<Negocio> allNegocios = negocioRepository.findAll();
+        System.out.println(negocio.getRUC());
+        for(Negocio nego:allNegocios){
+            if(nego.getRUC() != null && nego.getPassword() != null){
+                if(nego.getRUC().equals(negocio.getRUC()) && nego.getPassword().equals(negocio.getPassword())){
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+    public String checkWhatIsWrong(Negocio negocio){
+        List<Negocio> allNegocios = negocioRepository.findAll();
+        for(Negocio nego:allNegocios){
+            if(nego.getRUC() != null){
+                if(nego.getRUC().equals(negocio.getRUC())){
+                    return "Password is wrong.";
+                }
+            }
+
+        }
+        return "RUC is wrong.";
     }
 }

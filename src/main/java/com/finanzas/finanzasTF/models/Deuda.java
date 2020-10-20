@@ -1,5 +1,7 @@
 package com.finanzas.finanzasTF.models;
 
+import javassist.expr.Cast;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class Deuda {
     private Float interes;
     private Boolean metodoPago;
     private Boolean pagado;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="deuda_id")
     private List<Gasto> gastos;
     public Deuda(){

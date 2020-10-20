@@ -14,11 +14,11 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Perfil perfil;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Tasa tasa;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="cliente_id")
     private List<Deuda> deudas;
 
@@ -41,7 +41,7 @@ public class Cliente {
 
     }
     public Cliente(Integer negocio_id, Integer id, Perfil perfil, String credito,
-                   Boolean mantenimiento, LocalDateTime fechaEmision, String moneda) {
+                   Boolean mantenimiento, LocalDateTime fechaEmision, String moneda, Tasa tasa) {
         this.id = id;
         this.perfil = perfil;
         this.credito = credito;
@@ -50,6 +50,7 @@ public class Cliente {
         this.negocio_id = negocio_id;
         this.moneda = moneda;
         this.deudas = new ArrayList<>();
+        this.tasa = tasa;
     }
 
     public Integer getId() {
@@ -68,6 +69,21 @@ public class Cliente {
         this.perfil = perfil;
     }
 
+    public Tasa getTasa() {
+        return tasa;
+    }
+
+    public void setTasa(Tasa tasa) {
+        this.tasa = tasa;
+    }
+
+    public List<Deuda> getDeudas() {
+        return deudas;
+    }
+
+    public void setDeudas(List<Deuda> deudas) {
+        this.deudas = deudas;
+    }
 
     public String getCredito() {
         return credito;

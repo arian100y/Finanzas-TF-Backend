@@ -5,6 +5,7 @@ import com.finanzas.finanzasTF.models.Negocio;
 import com.finanzas.finanzasTF.repository.ClienteRepository;
 import com.finanzas.finanzasTF.repository.NegocioRepository;
 import com.finanzas.finanzasTF.repository.PerfilRepository;
+import com.finanzas.finanzasTF.repository.TasaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class ClienteService  {
     private PerfilRepository perfilRepository;
     @Autowired
     private NegocioService NegocioService;
+    @Autowired
+    private TasaRepository tasaRepository;
 
     public List<Cliente> getAllClientes(){
 
@@ -30,7 +33,9 @@ public class ClienteService  {
     }
 
     public void addCliente(Cliente cliente){
-    perfilRepository.save(cliente.getPerfil());
+    //perfilRepository.save(cliente.getPerfil());
+    //System.out.println(cliente.getId());
+
     clienteRepository.save(cliente);
     }
 

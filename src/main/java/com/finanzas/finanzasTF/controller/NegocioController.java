@@ -36,12 +36,15 @@ public class NegocioController {
         negocioService.addNegocio(negocio);
     }
 
-
+    @PostMapping("/delete")
+    public void delete(){
+        negocioService.deleteAll();
+    }
     @PostMapping("/login")
     public ResponseEntity<? > checkLogin(@RequestBody Negocio negocio) {
 
         if (negocioService.check(negocio) == true) {
-            System.out.println("WTF");
+
             Negocio temp = negocioService.verifyLogin(negocio);
             return new ResponseEntity<>(temp, HttpStatus.OK);
         } else {

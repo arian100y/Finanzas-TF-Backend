@@ -31,6 +31,9 @@ public class ClienteService  {
 
         return clientes;
     }
+    public void delete(){
+        clienteRepository.deleteAll();
+    }
 
     public void addCliente(Cliente cliente){
     //perfilRepository.save(cliente.getPerfil());

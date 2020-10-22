@@ -33,6 +33,11 @@ public class ClienteController {
         clienteService.addCliente(cliente);
     }
 
+    @PostMapping("/delete")
+    public void delete(){
+        clienteService.delete();
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> checkLogin(@RequestBody Negocio negocio){
         Cliente temp = clienteService.verifyLogin(negocio);

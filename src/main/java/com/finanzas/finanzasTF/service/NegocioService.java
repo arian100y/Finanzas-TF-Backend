@@ -31,14 +31,19 @@ public class NegocioService {
 
         negocioRepository.save(negocio);
     }
+    public void deleteAll(){
+        negocioRepository.deleteAll();
+    }
     public Negocio verifyLogin(Negocio negocio){
         List<Negocio> allNegocios = negocioRepository.findAll();
 
         for(Negocio nego:allNegocios){
-            System.out.println("THIS I KNOW");
-            if(nego.getRUC().equals(negocio.getRUC()) && nego.getPassword().equals(negocio.getPassword())){
-                return nego;
+            if(nego.getRUC() != null && nego.getPassword() != null){
+                if(nego.getRUC().equals(negocio.getRUC()) && nego.getPassword().equals(negocio.getPassword())){
+                    return nego;
+                }
             }
+
         }
 
         return null;
@@ -57,7 +62,7 @@ public class NegocioService {
     }
     public Boolean check(Negocio negocio){
         List<Negocio> allNegocios = negocioRepository.findAll();
-        System.out.println(negocio.getRUC());
+
         for(Negocio nego:allNegocios){
             if(nego.getRUC() != null && nego.getPassword() != null){
                 if(nego.getRUC().equals(negocio.getRUC()) && nego.getPassword().equals(negocio.getPassword())){

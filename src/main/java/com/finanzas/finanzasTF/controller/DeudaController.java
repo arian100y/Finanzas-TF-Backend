@@ -28,4 +28,8 @@ public class DeudaController {
         deudadService.addDeuda(deuda);
     }
 
+    @GetMapping("/porfecha/{id}")
+    Deuda getDeudaFechas(@PathVariable Integer id){
+        return deudadService.getDeudaFecha(id);
+    }
 }

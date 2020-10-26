@@ -28,4 +28,8 @@ public class GastoController {
         gastoService.addGasto(gasto);
     }
 
+    @GetMapping("/{id}")
+    public List<Gasto> getByUserId(@PathVariable Integer id){
+        return gastoService.getAllByUserId(id);
+    }
 }

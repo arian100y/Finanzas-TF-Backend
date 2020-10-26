@@ -27,4 +27,7 @@ public class GastoService {
 
         gastoRepository.save(gasto);
     }
+    public List<Gasto> getAllByUserId(Integer id){
+        return gastoRepository.findGastoByUserId(id);
+    }
 }

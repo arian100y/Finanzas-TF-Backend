@@ -10,14 +10,14 @@ public class Notificacion {
     private Integer id;
     private Integer perfil_id;
     private String mensaje;
-    private Boolean estado;
+    private Boolean tipo_perfil;
 
     public Notificacion(){}
-    public Notificacion(Integer id, Integer perfil_id, String mensaje, Boolean estado) {
+    public Notificacion(Integer id, Integer perfil_id, String mensaje, Boolean tipo_perfil) {
         this.id = id;
         this.perfil_id = perfil_id;
         this.mensaje = mensaje;
-        this.estado = estado;
+        this.tipo_perfil = tipo_perfil;
     }
 
     public Integer getId() {
@@ -44,11 +44,11 @@ public class Notificacion {
         this.mensaje = mensaje;
     }
 
-    public Boolean getEstado() {
-        return estado;
+    public Boolean getTipo_perfil() {
+        return tipo_perfil;
     }
 
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
+    public void setTipo_perfil(Boolean tipo_perfil) {
+        this.tipo_perfil = tipo_perfil;
     }
 }

@@ -86,4 +86,9 @@ public class NegocioService {
         }
         return "RUC is wrong.";
     }
+
+    public Negocio getNegocioByPerfilId(Integer perfil_id){
+        return negocioRepository.findOneByPerfilId(perfil_id);
+    }
+
 }

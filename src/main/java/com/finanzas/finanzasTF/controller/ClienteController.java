@@ -48,4 +48,9 @@ public class ClienteController {
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/{perfil_id}")
+    public List<Cliente> getClientesByPerfilId(@RequestBody Integer perfil_id){
+        return clienteService.getClientesByPerfilId(perfil_id);
+    }
 }

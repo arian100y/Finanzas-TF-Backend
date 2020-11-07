@@ -1,5 +1,6 @@
 package com.finanzas.finanzasTF.service;
 
+import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Gasto;
 import com.finanzas.finanzasTF.models.Notificacion;
 import com.finanzas.finanzasTF.repository.GastoRepository;

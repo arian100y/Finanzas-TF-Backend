@@ -51,9 +51,13 @@ public class NegocioController {
         }
     }
 
-    @GetMapping("/{RUC}")
+    @GetMapping("/RUC={RUC}")
     public Negocio getNegocioByRUC(@PathVariable("RUC") Integer RUC){
         return negocioService.getNegocioByRUC(RUC);
     }
 
+    @GetMapping("/perfil_id={perfil_id}")
+    public Negocio getNegocioByPerfil_id(@PathVariable("perfil_id") Integer perfil_id){
+        return negocioService.getNegocioByPerfil_id(perfil_id);
+    }
 }

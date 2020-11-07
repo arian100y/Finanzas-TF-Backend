@@ -1,5 +1,6 @@
 package com.finanzas.finanzasTF.service;
 
+import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Negocio;
 import com.finanzas.finanzasTF.models.Perfil;
 import com.finanzas.finanzasTF.repository.NegocioRepository;
@@ -90,5 +91,7 @@ public class NegocioService {
     public Negocio getNegocioByRUC(Integer RUC){
         return negocioRepository.findOneNegocioByRUC(RUC);
     }
+
+    public Negocio getNegocioByPerfil_id(Integer RUC) {return negocioRepository.findOneNegocioByPerfil_id(RUC);}
 
 }

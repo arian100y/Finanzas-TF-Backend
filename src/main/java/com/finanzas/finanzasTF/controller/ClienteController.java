@@ -49,8 +49,14 @@ public class ClienteController {
         }
     }
 
-    @GetMapping("/{DNI}")
+    @GetMapping("/DNI={DNI}")
     public Cliente getClienteByDNI(@PathVariable("DNI") Integer DNI){
         return clienteService.getClienteByDNI(DNI);
     }
+
+    @GetMapping("/perfil_id={perfil_id}")
+    public Cliente getClienteByPerfil_id(@PathVariable("perfil_id") Integer perfil_id){
+        return clienteService.getClienteByPerfil_id(perfil_id);
+    }
+
 }

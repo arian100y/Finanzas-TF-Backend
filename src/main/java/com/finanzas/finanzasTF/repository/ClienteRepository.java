@@ -15,4 +15,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
             value = "SELECT * FROM Clientes c INNER JOIN Perfils p ON c.perfil_id = p.id WHERE p.DNI = :DNI",
             nativeQuery = true)
     Cliente findClienteByDNI(@Param("DNI") Integer DNI);
+
+    Cliente findOneClienteByPerfil_id(Integer perfil_id);
 }

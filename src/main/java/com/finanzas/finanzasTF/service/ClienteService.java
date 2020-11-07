@@ -78,5 +78,5 @@ public class ClienteService {
     public Cliente getClienteByDNI(Integer DNI){
         return clienteRepository.findClienteByDNI(DNI);
     }
-
+    public Cliente getClienteByPerfil_id(Integer perfil_id) {return clienteRepository.findOneClienteByPerfil_id(perfil_id);}
 }

@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface NegocioRepository extends JpaRepository<Negocio,Integer > {
     Negocio findOneNegocioByRUC(Integer RUC);
+    Negocio findOneNegocioByPerfil_id(Integer perfil_id);
 }

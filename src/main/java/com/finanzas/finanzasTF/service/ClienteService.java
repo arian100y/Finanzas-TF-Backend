@@ -2,9 +2,7 @@ package com.finanzas.finanzasTF.service;
 
 import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Negocio;
-import com.finanzas.finanzasTF.models.Notificacion;
 import com.finanzas.finanzasTF.repository.ClienteRepository;
-import com.finanzas.finanzasTF.repository.NegocioRepository;
 import com.finanzas.finanzasTF.repository.PerfilRepository;
 import com.finanzas.finanzasTF.repository.TasaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +75,8 @@ public class ClienteService {
 
     }
 
-    public List<Cliente> getClientesByPerfilId(Integer perfil_id){
-        return new ArrayList<>(clienteRepository.findAllByPerfilId(perfil_id));
+    public Cliente getClienteByDNI(Integer DNI){
+        return clienteRepository.findClienteByDNI(DNI);
     }
 
 }

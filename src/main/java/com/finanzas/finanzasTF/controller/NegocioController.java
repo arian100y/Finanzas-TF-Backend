@@ -1,5 +1,6 @@
 package com.finanzas.finanzasTF.controller;
 
+import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Negocio;
 import com.finanzas.finanzasTF.service.NegocioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,9 @@ public class NegocioController {
         }
     }
 
-    @GetMapping("/{perfil_id}")
-    public Negocio getNegocioByPerfilId(@RequestBody Integer perfil_id){
-        return negocioService.getNegocioByPerfilId(perfil_id);
+    @GetMapping("/{RUC}")
+    public Negocio getNegocioByRUC(@PathVariable("RUC") Integer RUC){
+        return negocioService.getNegocioByRUC(RUC);
     }
 
 }

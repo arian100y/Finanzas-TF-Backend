@@ -65,13 +65,13 @@ public class ClienteService {
         if (nego != null) {
             for (Cliente client : nego.getClientes()) {
                 if (client.getPerfil().getDNI().equals(negocio.getClientes().get(0).getPerfil().getDNI())) {
-                    return "Codigo de negocio is wrong.";
+                    return "El código de negocio es erróneo. Vuelva a intentarlo.";
                 }
             }
         }
 
 
-        return "DNI is wrong.";
+        return "El DNI es erróneo. Vuelva a intentarlo.";
 
     }
 

@@ -51,10 +51,13 @@ public class NegocioService {
     }
     public Negocio getNegocioByCodigo(String codigo){
         List<Negocio> allNegocios = negocioRepository.findAll();
+
+
         for(Negocio nego:allNegocios)
             if(nego.getCodigo() != null){
 
                 if(nego.getCodigo().equals(codigo)){
+
                     return nego;
                 }
         }

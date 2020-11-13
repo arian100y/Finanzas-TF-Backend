@@ -48,9 +48,14 @@ public class ClienteService {
 
         if (nego != null) {
             for (Cliente client : nego.getClientes()) {
-                if (client.getPerfil().getDNI().equals(negocio.getClientes().get(0).getPerfil().getDNI())) {
-                    return client;
+
+                if(client.getPerfil().getDNI() != null){
+
+                    if (client.getPerfil().getDNI().equals(negocio.getClientes().get(0).getPerfil().getDNI())) {
+                        return client;
+                    }
                 }
+
             }
         }
 
@@ -62,16 +67,18 @@ public class ClienteService {
 
         Negocio nego = NegocioService.getNegocioByCodigo(negocio.getCodigo());
 
-        if (nego != null) {
-            for (Cliente client : nego.getClientes()) {
-                if (client.getPerfil().getDNI().equals(negocio.getClientes().get(0).getPerfil().getDNI())) {
-                    return "El código de negocio es erróneo. Vuelva a intentarlo.";
-                }
-            }
+        Cliente c = clienteRepository.findClienteByDNI(negocio.getClientes().get(0).getPerfil().getDNI());
+
+        if(c == null){
+            return "El DNI no existe. Vuelva a intentarlo.";
+        }
+        if(nego == null){
+            return "El negocio no existe. Vuelva a intentarlo.";
         }
 
 
-        return "El DNI es erróneo. Vuelva a intentarlo.";
+
+       return "El DNI no pertenece a la tienda. Vuelva a intentarlo.";
 
     }
 

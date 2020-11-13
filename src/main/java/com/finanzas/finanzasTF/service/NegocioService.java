@@ -80,12 +80,12 @@ public class NegocioService {
         for(Negocio nego:allNegocios){
             if(nego.getRUC() != null){
                 if(nego.getRUC().equals(negocio.getRUC())){
-                    return "Password is wrong.";
+                    return "El password es erróneo. Vuelva a intentarlo.";
                 }
             }
 
         }
-        return "RUC is wrong.";
+        return "El RUC es erróneo. Vuelva a intentarlo.";
     }
 
     public Negocio getNegocioByRUC(Integer RUC){

@@ -38,7 +38,7 @@ public class ClienteService {
         clienteRepository.deleteAll();
     }
 
-    public ResponseEntity<?> addCliente(Cliente cliente) {
+    public ResponseEntity<?> verify(Cliente cliente) {
         //perfilRepository.save(cliente.getPerfil());
         //System.out.println(cliente.getId());
 
@@ -54,10 +54,13 @@ public class ClienteService {
 
         }
 
-        clienteRepository.save(cliente);
-        return new ResponseEntity<String>( HttpStatus.CREATED);
+
+        return new ResponseEntity<String>( HttpStatus.OK);
     }
 
+    public void addCliente(Cliente cliente){
+        clienteRepository.save(cliente);
+    }
     public Cliente verifyLogin(Negocio negocio) {
 
         Negocio nego = NegocioService.getNegocioByCodigo(negocio.getCodigo());

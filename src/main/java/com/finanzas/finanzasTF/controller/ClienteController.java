@@ -28,12 +28,16 @@ public class ClienteController {
         return clienteService.getAllClientes();
     }
 
-    @PostMapping
-    public ResponseEntity<?>  addCliente(@RequestBody Cliente cliente){
+    @PostMapping("/verify")
+    public ResponseEntity<?>  verify(@RequestBody Cliente cliente){
 
-        return clienteService.addCliente(cliente);
+        return clienteService.verify(cliente);
     }
+    @PostMapping
+    public void addCliente(@RequestBody Cliente cliente){
 
+         clienteService.addCliente(cliente);
+    }
     @PostMapping("/delete")
     public void delete(){
         clienteService.delete();

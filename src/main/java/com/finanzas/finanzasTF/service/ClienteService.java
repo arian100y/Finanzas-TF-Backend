@@ -6,6 +6,8 @@ import com.finanzas.finanzasTF.repository.ClienteRepository;
 import com.finanzas.finanzasTF.repository.PerfilRepository;
 import com.finanzas.finanzasTF.repository.TasaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class ClienteService {
     @Autowired
     private TasaRepository tasaRepository;
 
+
     public List<Cliente> getAllClientes() {
 
         List<Cliente> clientes = new ArrayList<>();
@@ -35,11 +38,24 @@ public class ClienteService {
         clienteRepository.deleteAll();
     }
 
-    public void addCliente(Cliente cliente) {
+    public ResponseEntity<?> addCliente(Cliente cliente) {
         //perfilRepository.save(cliente.getPerfil());
         //System.out.println(cliente.getId());
 
+        Negocio nego = NegocioService.getNegocioById(cliente.getNegocio_id());
+        for (Cliente client:
+             nego.getClientes()) {
+            if(client.getPerfil().getDNI() != null){
+                System.out.println("HEE");
+                if(client.getPerfil().getDNI().equals(cliente.getPerfil().getDNI())){
+                    return new ResponseEntity<String>("El DNI ya esta registrado con este negocio.", HttpStatus.FORBIDDEN);
+                }
+            }
+
+        }
+
         clienteRepository.save(cliente);
+        return new ResponseEntity<String>( HttpStatus.CREATED);
     }
 
     public Cliente verifyLogin(Negocio negocio) {

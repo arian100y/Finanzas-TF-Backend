@@ -28,9 +28,9 @@ public class NegocioController {
     }
 
     @PostMapping
-    public void addNegocio(@RequestBody Negocio negocio){
-        System.out.println(negocio.getPerfil().getCorreo());
-        negocioService.addNegocio(negocio);
+    public ResponseEntity<? >  addNegocio(@RequestBody Negocio negocio){
+
+        return negocioService.addNegocio(negocio);
     }
 
     @PostMapping("/delete")
@@ -45,7 +45,7 @@ public class NegocioController {
             Negocio temp = negocioService.verifyLogin(negocio);
             return new ResponseEntity<>(temp, HttpStatus.OK);
         } else {
-            System.out.println("TESTi");
+
             String response = negocioService.checkWhatIsWrong(negocio);
             return new ResponseEntity<String>(response, HttpStatus.NOT_FOUND);
         }

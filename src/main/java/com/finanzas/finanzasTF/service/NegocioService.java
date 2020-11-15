@@ -6,6 +6,8 @@ import com.finanzas.finanzasTF.models.Perfil;
 import com.finanzas.finanzasTF.repository.NegocioRepository;
 import com.finanzas.finanzasTF.repository.PerfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,12 +27,25 @@ public class NegocioService {
 
         return negocios;
     }
-    public void addNegocio(Negocio negocio){
+    public Negocio getNegocioById(Integer id){
+        return negocioRepository.findById(id).get();
+    }
+    public ResponseEntity<? > addNegocio(Negocio negocio){
+
+        if(this.negocioRepository.existsRUC(negocio.getRUC())){
+            return new ResponseEntity<String>("El RUC ya esta registrado.", HttpStatus.FORBIDDEN);
+        }
+        if(this.negocioRepository.existsCodigo(negocio.getCodigo())){
+            return new ResponseEntity<String>("El codigo de tienda ya esta registrado.", HttpStatus.FORBIDDEN);
+        }
         Perfil temp = new Perfil();
         temp = negocio.getPerfil();
         perfilRepository.save(temp);
 
+
         negocioRepository.save(negocio);
+        return new ResponseEntity<String>( HttpStatus.CREATED);
+
     }
     public void deleteAll(){
         negocioRepository.deleteAll();

@@ -29,8 +29,9 @@ public class ClienteController {
     }
 
     @PostMapping
-    public void addCliente(@RequestBody Cliente cliente){
-        clienteService.addCliente(cliente);
+    public ResponseEntity<?>  addCliente(@RequestBody Cliente cliente){
+
+        return clienteService.addCliente(cliente);
     }
 
     @PostMapping("/delete")

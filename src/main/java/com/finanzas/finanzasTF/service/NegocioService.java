@@ -110,6 +110,8 @@ public class NegocioService {
         return negocioRepository.findOneNegocioByRUC(RUC);
     }
 
-    public Negocio getNegocioByPerfil_id(Integer RUC) {return negocioRepository.findOneNegocioByPerfil_id(RUC);}
+    public Negocio getNegocioByPerfil_id(Integer id) {
+        return negocioRepository.findById(id).get();
+    }
 
 }

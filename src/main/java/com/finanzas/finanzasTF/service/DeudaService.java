@@ -29,6 +29,9 @@ public class DeudaService {
 
         deudaRepository.save(deuda);
     }
+    public void putDeuda(Deuda deuda){
+        deudaRepository.save(deuda);
+    }
 
     public Deuda getDeudaFecha(Integer id){
         List<Deuda> deudas =new ArrayList<>();

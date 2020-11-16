@@ -32,4 +32,9 @@ public class DeudaController {
     Deuda getDeudaFechas(@PathVariable Integer id){
         return deudadService.getDeudaFecha(id);
     }
+
+    @PutMapping
+    public void makePagado(@RequestBody Deuda deuda){
+        deudadService.putDeuda(deuda);
+    }
 }

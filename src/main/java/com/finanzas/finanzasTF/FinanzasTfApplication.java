@@ -19,7 +19,8 @@ public class FinanzasTfApplication {
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("*").allowedMethods("POST, GET, PUT, OPTIONS, PATCH, DELETE");
+				registry.addMapping("/**").allowedOrigins("*")
+						 .allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
 			}
 		};
 	}

@@ -29,7 +29,7 @@ public class GastoService {
         gastoRepository.save(gasto);
         Deuda deuda = deudaRepository.findById(gasto.getDeuda_id()).get();
         deuda.setMonto(deuda.getMonto() + gasto.getMonto());
-        
+        deudaRepository.save(deuda);
     }
     public List<Gasto> getAllByUserId(Integer id){
         return gastoRepository.findGastoByUserId(id);

@@ -38,6 +38,10 @@ public class ClienteService {
         clienteRepository.deleteAll();
     }
 
+    public void deleteById(Integer id){
+        clienteRepository.deleteById(id);
+    }
+
     public ResponseEntity<?> verify(Cliente cliente) {
         //perfilRepository.save(cliente.getPerfil());
         //System.out.println(cliente.getId());

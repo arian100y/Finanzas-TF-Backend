@@ -39,10 +39,14 @@ public class ClienteController {
          clienteService.addCliente(cliente);
     }
     @PostMapping("/delete")
-    public void delete(){
+    public void deleteAll(){
         clienteService.delete();
     }
 
+    @PostMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id){
+        clienteService.deleteById(id);
+    }
     @PostMapping("/login")
     public ResponseEntity<?> checkLogin(@RequestBody Negocio negocio){
         Cliente temp = clienteService.verifyLogin(negocio);

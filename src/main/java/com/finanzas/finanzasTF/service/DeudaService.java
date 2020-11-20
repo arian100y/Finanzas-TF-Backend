@@ -26,7 +26,8 @@ public class DeudaService {
         return deudas;
     }
     public void addDeuda(Deuda deuda){
-
+        LocalDateTime currentDate = LocalDateTime.now();
+        deuda.setFecha(currentDate);
         deudaRepository.save(deuda);
     }
     public void putDeuda(Deuda deuda){
@@ -49,5 +50,25 @@ public class DeudaService {
         }
 
         return clienteDeuda;
+    }
+
+    public void checkDeudas(){
+
+        LocalDateTime currentDate = LocalDateTime.now();
+
+        List<Deuda> allDeudas = new ArrayList<>(deudaRepository.findAll());
+        for (Deuda ded : allDeudas) {
+            if(ded.getFecha() != null){
+                if(ded.getFecha().getMonthValue() +1 % 11 == currentDate.getMonthValue()){
+                    if(ded.getFecha().getDayOfMonth() == currentDate.getDayOfMonth()){
+                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true,
+                                false);
+                        deudaRepository.save(newDeuda);
+                    }
+
+                }
+            }
+
+        }
     }
 }

@@ -5,9 +5,11 @@ import com.finanzas.finanzasTF.models.Deuda;
 import com.finanzas.finanzasTF.service.ClienteService;
 import com.finanzas.finanzasTF.service.DeudaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/deudas")
@@ -36,5 +38,14 @@ public class DeudaController {
     @PutMapping
     public void makePagado(@RequestBody Deuda deuda){
         deudadService.putDeuda(deuda);
+    }
+    @GetMapping("/check")
+    public void checkManuallyDeudas(){
+        deudadService.checkDeudas();
+    }
+
+    @Scheduled(cron = "0 0 * * *")
+    public void checkDeudas(){
+        deudadService.checkDeudas();
     }
 }

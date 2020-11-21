@@ -42,7 +42,8 @@ public class GastoService {
         float newCredito = Float.parseFloat(cliente.getCredito())-gasto.getMonto();
         System.out.println(newCredito);
         cliente.setCredito(String.valueOf(newCredito));
-        //deudaRepository.save(deuda);
+        clienteRepository.save(cliente);
+
     }
     public List<Gasto> getAllByUserId(Integer id){
         return gastoRepository.findGastoByUserId(id);

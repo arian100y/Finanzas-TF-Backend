@@ -39,8 +39,10 @@ public class GastoService {
         Cliente cliente = new Cliente();
         cliente = clienteRepository.findById(deuda.getCliente_id()).get();
         
-        float newCredito = Float.parseFloat(cliente.getCredito())-gasto.getMonto();
+        float newCredito = Float.parseFloat(cliente.getCredito())-gasto.getMonto() - gasto.getEnvioMonto();
         System.out.println(newCredito);
+        System.out.println(String.valueOf(newCredito));
+
         cliente.setCredito(String.valueOf(newCredito));
         clienteRepository.save(cliente);
 

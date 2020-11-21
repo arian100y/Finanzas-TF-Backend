@@ -26,7 +26,8 @@ public class Cliente {
     private Boolean mantenimiento;
     private LocalDateTime fechaEmision;
     private String moneda;
-
+    private Integer capitalizacion;
+    
     private Integer negocio_id;
 
     public Integer getNegocio_id() {

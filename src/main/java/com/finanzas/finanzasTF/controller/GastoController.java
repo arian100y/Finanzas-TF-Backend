@@ -32,6 +32,7 @@ public class GastoController {
     public List<Gasto> getByUserId(@PathVariable Integer id){
         return gastoService.getAllByUserId(id);
     }
+
     @DeleteMapping
     public void deleteALl(){
         gastoService.deleteAll();

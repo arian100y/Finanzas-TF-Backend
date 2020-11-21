@@ -34,6 +34,7 @@ public class GastoService {
 
         gastoRepository.save(gasto);
         Deuda deuda = deudaRepository.findById(gasto.getDeuda_id()).get();
+
         deuda.setMonto(deuda.getMonto() + gasto.getMonto());
         deudaService.updateDeuda(deuda);
         Cliente cliente = new Cliente();

@@ -97,8 +97,10 @@ public class DeudaService {
         return (float)(C*Math.pow(1+TEP,nTras/nTEP));
     }
     public float generateInterest(Deuda deuda){
+
         return valorFuturoEfectivo(deuda.getMonto(),1.0f,1,2)-deuda.getMonto();
     }
+
     public void updateDeuda(Deuda deuda){
     deuda.setInteres(generateInterest(deuda));
 

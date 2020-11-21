@@ -3,6 +3,7 @@ package com.finanzas.finanzasTF.service;
 import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Deuda;
 import com.finanzas.finanzasTF.models.Gasto;
+import com.finanzas.finanzasTF.repository.ClienteRepository;
 import com.finanzas.finanzasTF.repository.DeudaRepository;
 import com.finanzas.finanzasTF.repository.GastoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class GastoService {
 
         return gastos;
     }
+    @Autowired
+    ClienteRepository clienteRepository ;
     public void addGasto(Gasto gasto){
 
         gastoRepository.save(gasto);
@@ -34,7 +37,10 @@ public class GastoService {
         deuda.setMonto(deuda.getMonto() + gasto.getMonto());
         deudaService.updateDeuda(deuda);
         Cliente cliente = new Cliente();
+        cliente = clienteRepository.findById(deuda.getCliente_id()).get();
+        
         float newCredito = Float.parseFloat(cliente.getCredito())-gasto.getMonto();
+        System.out.println(newCredito);
         cliente.setCredito(String.valueOf(newCredito));
         //deudaRepository.save(deuda);
     }

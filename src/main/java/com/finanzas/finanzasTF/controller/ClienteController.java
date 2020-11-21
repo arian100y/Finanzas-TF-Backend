@@ -38,6 +38,12 @@ public class ClienteController {
 
          clienteService.addCliente(cliente);
     }
+
+    @PutMapping("/edit")
+    public void editCliente(@RequestBody Cliente cliente){
+        clienteService.editCliente(cliente);
+    }
+
     @PostMapping("/delete")
     public void deleteAll(){
         clienteService.delete();

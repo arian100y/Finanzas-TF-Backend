@@ -42,6 +42,10 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
+    public void editCliente(Cliente cliente){
+        clienteRepository.save(cliente);
+    }
+
     public ResponseEntity<?> verify(Cliente cliente) {
         //perfilRepository.save(cliente.getPerfil());
         //System.out.println(cliente.getId());

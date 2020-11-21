@@ -71,4 +71,36 @@ public class DeudaService {
 
         }
     }
+
+    public float TNaTEP(Float tasa,Integer n,Integer m){
+
+        return (float)(Math.pow(1+tasa/m ,n)-1);
+    }
+    public float TEPaTN(Float TEP,Integer n,Integer m){
+
+        return (float)(m*(Math.pow(1+TEP,1/n)-1));
+    }
+    public float TEPaTEP(Float TEP1,Integer n2,Integer n1 ){
+
+        return (float)(Math.pow((1+TEP1),(n2/n1)) - 1);
+    }
+
+    public float valorFuturoSimple(float C,float i, float t){
+        return (float)(C*(1+i*t));
+    }
+    public float valorFuturoCompuesto(float C,float TN, int m , int n){
+
+        return (float)(C*Math.pow((1+TN/m),n));
+    }
+    public float valorFuturoEfectivo(float C,float TEP,int nTras, int nTEP){
+
+        return (float)(C*Math.pow(1+TEP,nTras/nTEP));
+    }
+    public float generateInterest(Deuda deuda){
+        return valorFuturoEfectivo(deuda.getMonto(),1.0f,1,2)-deuda.getMonto();
+    }
+    public void updateDeuda(Deuda deuda){
+    deuda.setInteres(generateInterest(deuda));
+    deudaRepository.save(deuda);
+    }
 }

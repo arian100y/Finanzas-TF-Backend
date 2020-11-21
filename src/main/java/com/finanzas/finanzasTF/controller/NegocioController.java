@@ -37,6 +37,7 @@ public class NegocioController {
     public void delete(){
         negocioService.deleteAll();
     }
+
     @PostMapping("/login")
     public ResponseEntity<? > checkLogin(@RequestBody Negocio negocio) {
 

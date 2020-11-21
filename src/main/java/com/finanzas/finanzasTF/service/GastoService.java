@@ -17,6 +17,8 @@ public class GastoService {
     private GastoRepository gastoRepository;
     @Autowired
     private DeudaRepository deudaRepository;
+    @Autowired
+    private DeudaService deudaService;
     public List<Gasto> getAllGastos(){
 
         List<Gasto> gastos = new ArrayList<>();
@@ -29,7 +31,8 @@ public class GastoService {
         gastoRepository.save(gasto);
         Deuda deuda = deudaRepository.findById(gasto.getDeuda_id()).get();
         deuda.setMonto(deuda.getMonto() + gasto.getMonto());
-        deudaRepository.save(deuda);
+        deudaService.updateDeuda(deuda);
+        //deudaRepository.save(deuda);
     }
     public List<Gasto> getAllByUserId(Integer id){
         return gastoRepository.findGastoByUserId(id);

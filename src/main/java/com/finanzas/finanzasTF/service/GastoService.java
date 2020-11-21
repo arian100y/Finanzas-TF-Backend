@@ -1,5 +1,6 @@
 package com.finanzas.finanzasTF.service;
 
+import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Deuda;
 import com.finanzas.finanzasTF.models.Gasto;
 import com.finanzas.finanzasTF.repository.DeudaRepository;
@@ -32,6 +33,9 @@ public class GastoService {
         Deuda deuda = deudaRepository.findById(gasto.getDeuda_id()).get();
         deuda.setMonto(deuda.getMonto() + gasto.getMonto());
         deudaService.updateDeuda(deuda);
+        Cliente cliente = new Cliente();
+        float newCredito = Float.parseFloat(cliente.getCredito())-gasto.getMonto();
+        cliente.setCredito(String.valueOf(newCredito));
         //deudaRepository.save(deuda);
     }
     public List<Gasto> getAllByUserId(Integer id){

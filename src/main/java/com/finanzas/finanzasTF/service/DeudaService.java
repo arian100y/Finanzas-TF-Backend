@@ -101,6 +101,8 @@ public class DeudaService {
     }
     public void updateDeuda(Deuda deuda){
     deuda.setInteres(generateInterest(deuda));
+
     deudaRepository.save(deuda);
+
     }
 }

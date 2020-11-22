@@ -127,7 +127,7 @@ public class ClienteService {
             Integer daysMantenimiento = days[cliente.getPeriodoMantenimiento()];
             Deuda lastDeuda = getLastDeuda(cliente);
             if (daysCurrent % daysMantenimiento == daysMantenimiento && lastDeuda.getMonto() == 0) {
-                lastDeuda.setMontoMantenimiento(Float.parseFloat(cliente.getCredito()) * cliente.getMantenimiento());
+                lastDeuda.setMontoMantenimiento( lastDeuda.getMontoMantenimiento() + Float.parseFloat(cliente.getCredito()) * cliente.getMantenimiento());
             }
         }
     }

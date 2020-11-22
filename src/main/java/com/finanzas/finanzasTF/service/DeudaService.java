@@ -80,7 +80,6 @@ public class DeudaService {
         return (float)(m*(Math.pow(1+TEP,1/n)-1));
     }
     public float TEPaTEP(Float TEP1,Integer n2,Integer n1 ){
-
         return (float)(Math.pow((1+TEP1),(n2/n1)) - 1);
     }
 

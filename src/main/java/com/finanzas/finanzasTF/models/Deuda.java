@@ -36,7 +36,7 @@ public class Deuda {
         this.metodoPago = metodoPago;
         this.pagado = pagado;
         this.gastos = new ArrayList<>();
-        this.montoMantenimiento = 0f;
+        this.montoMantenimiento = 0.0f;
     }
 
     public List<Gasto> getGastos() {

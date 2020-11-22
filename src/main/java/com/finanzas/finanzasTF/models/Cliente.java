@@ -5,6 +5,8 @@ import jdk.jfr.Enabled;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -26,8 +28,9 @@ public class Cliente {
     private LocalDateTime fechaEmision;
     private String moneda;
     private Float mantenimiento;
+    private Float montoMantenimiento;
     private Integer periodoMantenimiento;
-    
+
     private Integer negocio_id;
 
     public Integer getNegocio_id() {
@@ -53,6 +56,7 @@ public class Cliente {
         this.deudas = new ArrayList<>();
         this.tasa = tasa;
         this.periodoMantenimiento = periodoMantenimiento;
+        this.montoMantenimiento = 0f;
     }
 
     public Integer getId() {
@@ -125,5 +129,13 @@ public class Cliente {
 
     public void setPeriodoMantenimiento(Integer periodoMantenimiento) {
         this.periodoMantenimiento = periodoMantenimiento;
+    }
+
+    public Float getMontoMantenimiento() {
+        return montoMantenimiento;
+    }
+
+    public void setMontoMantenimiento(Float montoMantenimiento) {
+        this.montoMantenimiento = montoMantenimiento;
     }
 }

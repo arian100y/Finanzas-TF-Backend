@@ -101,6 +101,8 @@ public class DeudaService {
         return valorFuturoEfectivo(deuda.getMonto(),1.0f,1,2)-deuda.getMonto();
     }
 
+
+
     public void updateDeuda(Deuda deuda){
     deuda.setInteres(generateInterest(deuda));
 

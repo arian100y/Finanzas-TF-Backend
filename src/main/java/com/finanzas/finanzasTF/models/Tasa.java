@@ -12,15 +12,17 @@ public class Tasa {
     private Integer tipo;
     private Float monto;
     private Integer periodo;
+    private Integer periodoCapitalizacion;
 
-    public Tasa(Integer id, Integer tipo, Float monto, Integer periodo) {
+    public Tasa(Integer id, Integer tipo, Float monto, Integer periodo, Integer periodoCapitalizacion) {
         this.id = id;
         this.tipo = tipo;
         this.monto = monto;
         this.periodo = periodo;
+        this.periodoCapitalizacion = periodoCapitalizacion;
     }
-    public Tasa(){}
 
+    public Tasa(){}
     public Integer getId() {
         return id;
     }
@@ -51,5 +53,14 @@ public class Tasa {
 
     public void setPeriodo(Integer periodo) {
         this.periodo = periodo;
+    }
+
+    public Integer getPeriodoCapitalizacion() {
+        return periodoCapitalizacion;
+    }
+
+
+    public void setPeriodoCapitalizacion(Integer periodoCapitalizacion) {
+        this.periodoCapitalizacion = periodoCapitalizacion;
     }
 }

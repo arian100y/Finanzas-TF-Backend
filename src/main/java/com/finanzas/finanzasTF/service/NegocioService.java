@@ -27,9 +27,11 @@ public class NegocioService {
 
         return negocios;
     }
+
     public Negocio getNegocioById(Integer id){
         return negocioRepository.findById(id).get();
     }
+
     public ResponseEntity<? > addNegocio(Negocio negocio){
 
         if(this.negocioRepository.existsRUC(negocio.getRUC())){

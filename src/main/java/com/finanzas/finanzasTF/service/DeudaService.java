@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -52,25 +54,52 @@ public class DeudaService {
         return clienteDeuda;
     }
 
+    public void cobrarDeuda(){
+
+    }
+//    public Deuda getLastDeuda(){
+//        List<Deuda> deudas = this.getDeudas();
+//
+//        Collections.sort(deudas, new Comparator<Deuda>(){
+//            public int compare(Deuda s1, Deuda s2) {
+//                return s2.getId().compareTo(s1.getId());
+//            }
+//        });
+//
+//        return deudas.get(0);
+//    }
+    @Autowired
+    ClienteRepository clienteRepository;
     public void checkDeudas(){
 
+
         LocalDateTime currentDate = LocalDateTime.now();
+
+        System.out.println((12)% 12);
+
+        List<Cliente> clientes = clienteRepository.findAll();
+        //System.out.println(clientes.get(0).getLastDeuda().getId());
+
 
         List<Deuda> allDeudas = new ArrayList<>(deudaRepository.findAll());
         for (Deuda ded : allDeudas) {
             if(ded.getFecha() != null){
-                if(ded.getFecha().getMonthValue() +1 % 11 == currentDate.getMonthValue()){
+                if(ded.getFecha().getMonthValue() +1 % 12 == currentDate.getMonthValue()){
                     if(ded.getFecha().getDayOfMonth() == currentDate.getDayOfMonth()){
                         Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true,
                                 false);
                         deudaRepository.save(newDeuda);
+
                     }
 
                 }
             }
 
         }
+
     }
+
+
 
     public float TNaTEP(Float tasa,Integer n,Integer m){
 

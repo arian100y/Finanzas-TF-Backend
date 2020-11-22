@@ -44,8 +44,10 @@ public class DeudaController {
         deudadService.checkDeudas();
     }
 
-    @Scheduled(cron = "0 0 * * *")
+    //@Scheduled(cron = "0 0 * * *")
+    @GetMapping("/test")
     public void checkDeudas(){
+
         deudadService.checkDeudas();
     }
 }

@@ -20,6 +20,7 @@ public class Tasa {
         this.monto = monto;
         this.periodo = periodo;
         this.periodoCapitalizacion = periodoCapitalizacion;
+
     }
 
     public Tasa(){}

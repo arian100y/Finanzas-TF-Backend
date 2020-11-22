@@ -28,7 +28,6 @@ public class Cliente {
     private LocalDateTime fechaEmision;
     private String moneda;
     private Float mantenimiento;
-    private Float montoMantenimiento;
     private Integer periodoMantenimiento;
 
     private Integer negocio_id;
@@ -45,7 +44,7 @@ public class Cliente {
 
     }
     public Cliente(Integer negocio_id, Integer id, Perfil perfil, String credito,
-                   Float mantenimiento, LocalDateTime fechaEmision, String moneda, Tasa tasa, Integer periodoMantenimiento) {
+                   Float mantenimiento, LocalDateTime fechaEmision, String moneda, Tasa tasa) {
         this.id = id;
         this.perfil = perfil;
         this.credito = credito;
@@ -56,7 +55,6 @@ public class Cliente {
         this.deudas = new ArrayList<>();
         this.tasa = tasa;
         this.periodoMantenimiento = periodoMantenimiento;
-        this.montoMantenimiento = 0f;
     }
 
     public Integer getId() {
@@ -129,13 +127,5 @@ public class Cliente {
 
     public void setPeriodoMantenimiento(Integer periodoMantenimiento) {
         this.periodoMantenimiento = periodoMantenimiento;
-    }
-
-    public Float getMontoMantenimiento() {
-        return montoMantenimiento;
-    }
-
-    public void setMontoMantenimiento(Float montoMantenimiento) {
-        this.montoMantenimiento = montoMantenimiento;
     }
 }

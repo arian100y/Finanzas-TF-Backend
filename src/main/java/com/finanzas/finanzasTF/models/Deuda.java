@@ -27,7 +27,7 @@ public class Deuda {
     }
 
     public Deuda(Integer id, Integer cliente_id,
-                 LocalDateTime fecha, Float monto, Float interes, Boolean metodoPago, Boolean pagado, Float montoMantenimiento) {
+                 LocalDateTime fecha, Float monto, Float interes, Boolean metodoPago, Boolean pagado) {
         this.id = id;
         this.cliente_id = cliente_id;
         this.fecha = fecha;
@@ -36,7 +36,7 @@ public class Deuda {
         this.metodoPago = metodoPago;
         this.pagado = pagado;
         this.gastos = new ArrayList<>();
-        this.montoMantenimiento = montoMantenimiento;
+        this.montoMantenimiento = 0f;
     }
 
     public List<Gasto> getGastos() {

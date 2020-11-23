@@ -34,11 +34,11 @@ public class GastoService {
 
         gastoRepository.save(gasto);
         Deuda deuda = deudaRepository.findById(gasto.getDeuda_id()).get();
-
-        deuda.setMonto(deuda.getMonto() + gasto.getMonto());
-        deudaService.updateDeuda(deuda);
         Cliente cliente = new Cliente();
         cliente = clienteRepository.findById(deuda.getCliente_id()).get();
+        deuda.setMonto(deuda.getMonto() + gasto.getMonto());
+        deudaService.updateDeuda(deuda,cliente.getTasa());
+
         
         float newCredito = Float.parseFloat(cliente.getCredito())-gasto.getMonto() - gasto.getEnvioMonto();
         System.out.println(newCredito);

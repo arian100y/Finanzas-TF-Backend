@@ -2,6 +2,7 @@ package com.finanzas.finanzasTF.controller;
 
 import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Deuda;
+import com.finanzas.finanzasTF.repository.DeudaRepository;
 import com.finanzas.finanzasTF.service.ClienteService;
 import com.finanzas.finanzasTF.service.DeudaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class DeudaController {
     @Autowired
     private final DeudaService deudadService;
+    @Autowired
+    private DeudaRepository deudaRepository;
     public DeudaController(DeudaService deudadService){
         this.deudadService = deudadService;
     }
@@ -34,6 +37,10 @@ public class DeudaController {
     Deuda getDeudaFechas(@PathVariable Integer id){
         return deudadService.getDeudaFecha(id);
     }
+    @DeleteMapping
+    public void deleteAll(){
+        deudaRepository.deleteAll();
+    }
 
     @PutMapping
     public void makePagado(@RequestBody Deuda deuda){
@@ -48,6 +55,13 @@ public class DeudaController {
     @GetMapping("/test")
     public void checkDeudas(){
 
-        deudadService.checkDeudas();
+        deudadService.checkInteres();
     }
+
+    @GetMapping("/generate")
+    public void generate(){
+
+        deudadService.generateInterest();
+    }
+
 }

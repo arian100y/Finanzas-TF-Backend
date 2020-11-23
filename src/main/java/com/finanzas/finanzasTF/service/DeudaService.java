@@ -140,7 +140,6 @@ public class DeudaService {
             System.out.println(newDate);
 
 
-            Integer monthDate = lastDeuda.getFecha().getDayOfMonth();
 
 
             this.updateDeudaInteres(lastDeuda,cliente.getTasa());

@@ -13,7 +13,7 @@ public class Negocio {
     private Integer id;
     @OneToOne
     private Perfil perfil;
-    private Integer RUC;
+    private Long RUC;
     private String password;
     private String codigo;
     @OneToMany
@@ -21,7 +21,7 @@ public class Negocio {
     private List<Cliente> clientes;
 
     public Negocio(){}
-    public Negocio(Integer id, Perfil perfil, Integer RUC, String password, String codigo) {
+    public Negocio(Integer id, Perfil perfil, Long RUC, String password, String codigo) {
         this.id = id;
         this.perfil = perfil;
         this.RUC = RUC;
@@ -55,11 +55,11 @@ public class Negocio {
         this.perfil = perfil;
     }
 
-    public Integer getRUC() {
+    public Long getRUC() {
         return RUC;
     }
 
-    public void setRUC(Integer RUC) {
+    public void setRUC(Long RUC) {
         this.RUC = RUC;
     }
 

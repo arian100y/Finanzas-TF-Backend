@@ -27,9 +27,9 @@ public class NegocioController {
         return negocioService.getAllNegocios();
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<? >  addNegocio(@RequestBody Negocio negocio){
-
+        System.out.println("testing");
         return negocioService.addNegocio(negocio);
     }
 

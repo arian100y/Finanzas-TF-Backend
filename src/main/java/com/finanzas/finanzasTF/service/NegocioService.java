@@ -33,11 +33,13 @@ public class NegocioService {
     }
 
     public ResponseEntity<? > addNegocio(Negocio negocio){
-
+        System.out.println("IM CONFUSED");
         if(this.negocioRepository.existsRUC(negocio.getRUC())){
+            System.out.println("wtf?");
             return new ResponseEntity<String>("El RUC ya esta registrado.", HttpStatus.FORBIDDEN);
         }
         if(this.negocioRepository.existsCodigo(negocio.getCodigo())){
+            System.out.println("wtf222?");
             return new ResponseEntity<String>("El codigo de tienda ya esta registrado.", HttpStatus.FORBIDDEN);
         }
         Perfil temp = new Perfil();

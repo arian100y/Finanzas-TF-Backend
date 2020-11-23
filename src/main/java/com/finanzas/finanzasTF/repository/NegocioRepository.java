@@ -19,7 +19,7 @@ public interface NegocioRepository extends JpaRepository<Negocio,Integer > {
     @Query(value = "SELECT EXISTS (SELECT * FROM negocios n WHERE  (n.ruc = :ruc) )",
             nativeQuery = true)
     Boolean existsRUC(
-            @Param("ruc") Integer ruc);
+            @Param("ruc") Long ruc);
 
     @Query(value = "SELECT EXISTS (SELECT * FROM negocios n WHERE  (LOWER(n.codigo) = LOWER(:codigo)) )",
             nativeQuery = true)

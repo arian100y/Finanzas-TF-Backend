@@ -30,6 +30,7 @@ public class NegocioController {
     @PostMapping()
     public ResponseEntity<? >  addNegocio(@RequestBody Negocio negocio){
         System.out.println("testing");
+        
         return negocioService.addNegocio(negocio);
     }
 

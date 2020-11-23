@@ -54,7 +54,7 @@ public class NegocioController {
     }
 
     @GetMapping("/RUC={RUC}")
-    public Negocio getNegocioByRUC(@PathVariable("RUC") Integer RUC){
+    public Negocio getNegocioByRUC(@PathVariable("RUC") Long RUC){
         return negocioService.getNegocioByRUC(RUC);
     }
 

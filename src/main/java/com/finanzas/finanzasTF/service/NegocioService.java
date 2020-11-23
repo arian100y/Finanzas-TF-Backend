@@ -110,7 +110,7 @@ public class NegocioService {
         return "El RUC es erróneo. Vuelva a intentarlo.";
     }
 
-    public Negocio getNegocioByRUC(Integer RUC){
+    public Negocio getNegocioByRUC(Long RUC){
         return negocioRepository.findOneNegocioByRUC(RUC);
     }
 

@@ -110,8 +110,8 @@ public class DeudaService {
                 Integer monthDate = lastDeuda.getFecha().getDayOfMonth();
                 if (monthDate.equals(currentDate.getDayOfMonth())  ) {
 
-                    this.updateDeuda(lastDeuda,cliente.getTasa());
-
+                    //this.updateDeuda(lastDeuda);
+                    //generate interest?!??
                     Deuda newDeuda = new Deuda(null,lastDeuda.getCliente_id(),
                             currentDate,0.0f,0.0f,true,
                             false);
@@ -133,6 +133,7 @@ public class DeudaService {
 
             Deuda lastDeuda = this.getLastDeuda(cliente);
             Integer monthVal = lastDeuda.getFecha().getMonthValue()  % 13 ;
+
             if(monthVal == 0){monthVal += 1;}
             LocalDateTime newDate = lastDeuda.getFecha();
             newDate = newDate.plusMonths(1);
@@ -142,12 +143,13 @@ public class DeudaService {
             Integer monthDate = lastDeuda.getFecha().getDayOfMonth();
 
 
-            this.updateDeuda(lastDeuda,cliente.getTasa());
+            this.updateDeudaInteres(lastDeuda,cliente.getTasa());
 
-//            Deuda newDeuda = new Deuda(null,lastDeuda.getCliente_id(),
-//                            currentDate,0.0f,0.0f,true,
-//                            false);
-//            deudaRepository.save(newDeuda);
+           Deuda newDeuda = new Deuda(null,cliente.getId(),
+                        newDate,0.0f,0.0f,true,
+                          false);
+
+           deudaRepository.save(newDeuda);
 
         }
     }
@@ -317,10 +319,14 @@ public class DeudaService {
 
     }
 
-    public void updateDeuda(Deuda deuda, Tasa tasa){
-    deuda.setInteres(generateInterest(deuda,tasa));
-        System.out.println(deuda.getInteres());
-    //deudaRepository.save(deuda);
+    public void updateDeudaInteres(Deuda deuda,Tasa tasa){
+        deuda.setInteres(generateInterest(deuda,tasa));
+        deudaRepository.save(deuda);
+    }
+    public void updateDeuda(Deuda deuda){
+
+
+    deudaRepository.save(deuda);
 
     }
 }

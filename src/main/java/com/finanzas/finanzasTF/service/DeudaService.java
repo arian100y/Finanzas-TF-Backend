@@ -81,8 +81,7 @@ public class DeudaService {
             if(ded.getFecha() != null){
                 if(ded.getFecha().getMonthValue() +1 % 11 == currentDate.getMonthValue()){
                     if(ded.getFecha().getDayOfMonth() == currentDate.getDayOfMonth()){
-                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true,
-                                false);
+                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true, false);
                         deudaRepository.save(newDeuda);
 
                     }
@@ -161,7 +160,6 @@ public class DeudaService {
         return (float)(m*(Math.pow(1+TEP,1/n)-1));
     }
     public float TEPaTEP(Float TEP1,Integer n2,Integer n1 ){
-
         return (float)(Math.pow((1+TEP1),(n2/n1)) - 1);
     }
 

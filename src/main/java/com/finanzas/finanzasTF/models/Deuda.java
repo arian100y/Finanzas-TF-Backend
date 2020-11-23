@@ -19,6 +19,7 @@ public class Deuda {
     private Float interes;
     private Boolean metodoPago;
     private Boolean pagado;
+    private Float montoMantenimiento;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="deuda_id")
     private List<Gasto> gastos;
@@ -35,6 +36,7 @@ public class Deuda {
         this.metodoPago = metodoPago;
         this.pagado = pagado;
         this.gastos = new ArrayList<>();
+        this.montoMantenimiento = 0.0f;
     }
 
     public List<Gasto> getGastos() {
@@ -99,5 +101,13 @@ public class Deuda {
 
     public void setPagado(Boolean pagado) {
         this.pagado = pagado;
+    }
+
+    public Float getMontoMantenimiento() {
+        return montoMantenimiento;
+    }
+
+    public void setMontoMantenimiento(Float montoMantenimiento) {
+        this.montoMantenimiento = montoMantenimiento;
     }
 }

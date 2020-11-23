@@ -7,10 +7,12 @@ import com.finanzas.finanzasTF.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.Notification;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -74,4 +76,13 @@ public class ClienteController {
         return clienteService.getClienteByPerfil_id(perfil_id);
     }
 
+    @Scheduled(cron = "0 0 * * *")
+    public void checkMantenimiento(){
+        clienteService.checkMantenimiento(null);
+    }
+
+    @GetMapping("/date={date}")
+    public void checkMantenimiento(@PathVariable("date") LocalDateTime date){
+        clienteService.checkMantenimiento(date);
+    }
 }

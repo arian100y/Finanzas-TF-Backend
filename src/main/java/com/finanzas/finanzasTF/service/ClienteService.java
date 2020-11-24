@@ -4,8 +4,10 @@ import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Deuda;
 import com.finanzas.finanzasTF.models.Negocio;
 import com.finanzas.finanzasTF.repository.ClienteRepository;
+import com.finanzas.finanzasTF.repository.DeudaRepository;
 import com.finanzas.finanzasTF.repository.PerfilRepository;
 import com.finanzas.finanzasTF.repository.TasaRepository;
+import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ public class ClienteService {
     private NegocioService NegocioService;
     @Autowired
     private TasaRepository tasaRepository;
+    @Autowired
+    private DeudaRepository deudaRepository;
 
 
     public List<Cliente> getAllClientes() {
@@ -116,7 +120,7 @@ public class ClienteService {
 
     public void checkMantenimiento(LocalDateTime date) {
         Integer[] days = {7, 15, 30};
-        List<Cliente> clientes = new ArrayList<>(clienteRepository.findAll());
+        List<Cliente> clientes = clienteRepository.findAll();
         LocalDateTime currentDate;
         currentDate = Objects.requireNonNullElseGet(date, LocalDateTime::now);
 
@@ -129,6 +133,56 @@ public class ClienteService {
             if (daysCurrent % daysMantenimiento == daysMantenimiento && lastDeuda.getMonto() == 0) {
                 lastDeuda.setMontoMantenimiento( lastDeuda.getMontoMantenimiento() + Float.parseFloat(cliente.getCredito()) * cliente.getMantenimiento());
             }
+            deudaRepository.save(lastDeuda);
+        }
+    }
+
+    public void simulateMantenimiento() {
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        for (Cliente cliente : clientes) {
+            Deuda lastDeuda = getLastDeuda(cliente);
+            if (lastDeuda.getMonto() == 0.0f && cliente.getPeriodoMantenimiento() != null)
+            {
+                System.out.println("cliente.getPeriodoMantenimiento()");
+                System.out.println(cliente.getPeriodoMantenimiento());
+                switch (cliente.getPeriodoMantenimiento())
+                {
+                    case 0:
+                        lastDeuda.setMontoMantenimiento(Float.parseFloat(cliente.getCredito()) * cliente.getMantenimiento() *4);
+                        System.out.println("lastDeuda.getMontoMantenimiento()");
+                        System.out.println(lastDeuda.getMontoMantenimiento());
+                        deudaRepository.save(lastDeuda);
+                    case 1:
+                        lastDeuda.setMontoMantenimiento(Float.parseFloat(cliente.getCredito()) * cliente.getMantenimiento()* 2);
+                        deudaRepository.save(lastDeuda);
+                    case 2:
+                        lastDeuda.setMontoMantenimiento(Float.parseFloat(cliente.getCredito()) * cliente.getMantenimiento());
+                        deudaRepository.save(lastDeuda);
+                }
+            }
+        }
+    }
+
+    public void checkMora() {
+        List<Cliente> clientes = new ArrayList<>(clienteRepository.findAll());
+        LocalDateTime currentDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+        Integer daysCurrent = Integer.parseInt(currentDate.format(formatter));
+        if (daysCurrent > 30)
+            for (Cliente cliente : clientes){
+                Deuda lastDeuda = getLastDeuda(cliente);
+                lastDeuda.setHayMora(true);
+                deudaRepository.save(lastDeuda);
+            }
+    }
+
+    public void simulateMora() {
+        List<Cliente> clientes = new ArrayList<>(clienteRepository.findAll());
+        for (Cliente cliente : clientes){
+            Deuda lastDeuda = getLastDeuda(cliente);
+            lastDeuda.setHayMora(true);
+            deudaRepository.save(lastDeuda);
         }
     }
 

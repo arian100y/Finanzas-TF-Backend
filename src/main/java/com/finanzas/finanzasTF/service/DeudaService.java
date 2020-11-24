@@ -81,16 +81,12 @@ public class DeudaService {
             if(ded.getFecha() != null){
                 if(ded.getFecha().getMonthValue() +1 % 11 == currentDate.getMonthValue()){
                     if(ded.getFecha().getDayOfMonth() == currentDate.getDayOfMonth()){
-                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true, false);
+                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true, false, 0.0f);
                         deudaRepository.save(newDeuda);
-
                     }
-
                 }
             }
-
         }
-
     }
 
     public void checkInteres(){
@@ -114,7 +110,7 @@ public class DeudaService {
                     //generate interest?!??
                     Deuda newDeuda = new Deuda(null,lastDeuda.getCliente_id(),
                             currentDate,0.0f,0.0f,true,
-                            false);
+                            false, 0.0f);
                     deudaRepository.save(newDeuda);
 
                 }
@@ -147,7 +143,7 @@ public class DeudaService {
 
            Deuda newDeuda = new Deuda(null,cliente.getId(),
                         newDate,0.0f,0.0f,true,
-                          false);
+                          false,0.0f);
 
            deudaRepository.save(newDeuda);
 
@@ -315,14 +311,13 @@ public class DeudaService {
 
             return valorFuturoEfectivo(deuda.getMonto(),tasa.getMonto(),30,days)-deuda.getMonto();
         }
-
-
     }
 
     public void updateDeudaInteres(Deuda deuda,Tasa tasa){
-        deuda.setInteres(generateInterest(deuda,tasa));
+        deuda.setInteres(Math.round(generateInterest(deuda,tasa)*100f)/100f);
         deudaRepository.save(deuda);
     }
+
     public void updateDeuda(Deuda deuda){
 
 

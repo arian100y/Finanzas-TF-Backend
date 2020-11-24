@@ -1,16 +1,15 @@
 package com.finanzas.finanzasTF.controller;
 
-import com.finanzas.finanzasTF.models.Cliente;
 import com.finanzas.finanzasTF.models.Deuda;
 import com.finanzas.finanzasTF.repository.DeudaRepository;
 import com.finanzas.finanzasTF.service.ClienteService;
 import com.finanzas.finanzasTF.service.DeudaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/deudas")
@@ -18,9 +17,12 @@ public class DeudaController {
     @Autowired
     private final DeudaService deudadService;
     @Autowired
+    private final ClienteService clienteService;
+    @Autowired
     private DeudaRepository deudaRepository;
-    public DeudaController(DeudaService deudadService){
+    public DeudaController(DeudaService deudadService, ClienteService clienteService){
         this.deudadService = deudadService;
+        this.clienteService = clienteService;
     }
 
     @GetMapping
@@ -54,14 +56,19 @@ public class DeudaController {
     //@Scheduled(cron = "0 0 * * *")
     @GetMapping("/test")
     public void checkDeudas(){
-
         deudadService.checkInteres();
+        clienteService.checkMantenimiento(null);
+        clienteService.checkMora();
     }
 
     @GetMapping("/generate")
     public void generate(){
-
         deudadService.generateInterest();
+        clienteService.simulateMantenimiento();
     }
 
+    @GetMapping("/mora")
+    public void generateMora(){
+        clienteService.simulateMora();
+    }
 }

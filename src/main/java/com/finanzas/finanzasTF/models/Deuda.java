@@ -16,6 +16,8 @@ public class Deuda {
     private Integer cliente_id;
     private LocalDateTime fecha;
     private Float monto;
+    private Float montoMora;
+    private Boolean hayMora;
     private Float interes;
     private Boolean metodoPago;
     private Boolean pagado;
@@ -27,7 +29,7 @@ public class Deuda {
     }
 
     public Deuda(Integer id, Integer cliente_id,
-                 LocalDateTime fecha, Float monto, Float interes, Boolean metodoPago, Boolean pagado) {
+                 LocalDateTime fecha, Float monto, Float interes, Boolean metodoPago, Boolean pagado, Float montoMora) {
         this.id = id;
         this.cliente_id = cliente_id;
         this.fecha = fecha;
@@ -36,7 +38,9 @@ public class Deuda {
         this.metodoPago = metodoPago;
         this.pagado = pagado;
         this.gastos = new ArrayList<>();
+        this.montoMora = montoMora;
         this.montoMantenimiento = 0.0f;
+        this.hayMora = false;
     }
 
     public List<Gasto> getGastos() {
@@ -109,5 +113,21 @@ public class Deuda {
 
     public void setMontoMantenimiento(Float montoMantenimiento) {
         this.montoMantenimiento = montoMantenimiento;
+    }
+
+    public Float getMontoMora() {
+        return montoMora;
+    }
+
+    public void setMontoMora(Float montoMora) {
+        this.montoMora = montoMora;
+    }
+
+    public Boolean getHayMora() {
+        return hayMora;
+    }
+
+    public void setHayMora(Boolean hayMora) {
+        this.hayMora = hayMora;
     }
 }

@@ -61,15 +61,15 @@ public class DeudaController {
         clienteService.checkMora();
     }
 
-    @GetMapping("/generate")
-    public void generate(){
-        deudadService.generateInterest();
-        clienteService.simulateMantenimiento();
+    @PostMapping("/generate")
+    public void generate(@RequestBody LocalDateTime date){
+        deudadService.generateInterest(date);
+        //clienteService.simulateMantenimiento();
     }
 
     @GetMapping("/mora")
     public void generateMora(){
-        generate();
+        //generate();
         clienteService.simulateMora();
     }
 }

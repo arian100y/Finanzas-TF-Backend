@@ -9,11 +9,17 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class DeudaService {
@@ -55,9 +61,7 @@ public class DeudaService {
         return clienteDeuda;
     }
 
-    public void cobrarDeuda(){
 
-    }
    public Deuda getLastDeuda(Cliente cliente){
 
        List<Deuda> deudas = cliente.getDeudas();
@@ -95,19 +99,18 @@ public class DeudaService {
         this.getLastDeuda(clientes.get(0)).getId();
 
         for(Cliente cliente:clientes){
-            System.out.println("WTF");
+
             Deuda lastDeuda = this.getLastDeuda(cliente);
             Integer monthVal = lastDeuda.getFecha().getMonthValue()  % 13 ;
             if(monthVal == 0){monthVal += 1;}
-            System.out.println(monthVal);
-            System.out.println(currentDate.getMonthValue());
+
             if(monthVal.equals(currentDate.getMonthValue()) ) {
 
                 Integer monthDate = lastDeuda.getFecha().getDayOfMonth();
                 if (monthDate.equals(currentDate.getDayOfMonth())  ) {
 
-                    //this.updateDeuda(lastDeuda);
-                    //generate interest?!??
+                    this.updateDeudaInteres(lastDeuda,cliente.getTasa(),LocalDateTime.now());
+
                     Deuda newDeuda = new Deuda(null,lastDeuda.getCliente_id(),
                             currentDate,0.0f,0.0f,true,
                             false);
@@ -120,7 +123,8 @@ public class DeudaService {
 
         }
     }
-    public void generateInterest(){
+    public void generateInterest(LocalDateTime simDate){
+
 
         List<Cliente> clientes = clienteRepository.findAll();
         this.getLastDeuda(clientes.get(0)).getId();
@@ -128,23 +132,17 @@ public class DeudaService {
         for(Cliente cliente:clientes){
 
             Deuda lastDeuda = this.getLastDeuda(cliente);
-            Integer monthVal = lastDeuda.getFecha().getMonthValue()  % 13 ;
 
-            if(monthVal == 0){monthVal += 1;}
+
+            this.updateDeudaInteres(lastDeuda,cliente.getTasa(),simDate);
+
             LocalDateTime newDate = lastDeuda.getFecha();
             newDate = newDate.plusMonths(1);
-            System.out.println(newDate);
+           //Deuda newDeuda = new Deuda(null,cliente.getId(),
+             //           newDate,0.0f,0.0f,true,
+               //           false);
 
-
-
-
-            this.updateDeudaInteres(lastDeuda,cliente.getTasa());
-
-           Deuda newDeuda = new Deuda(null,cliente.getId(),
-                        newDate,0.0f,0.0f,true,
-                          false);
-
-           deudaRepository.save(newDeuda);
+           //deudaRepository.save(newDeuda);
 
         }
     }
@@ -164,113 +162,373 @@ public class DeudaService {
         return (float)(C*(1+i*t));
     }
     public float valorFuturoCompuesto(float C,float TN, float m , float n){
-        if(TN > 1){
-            TN = TN/100;
-        }
+
 
         return (float)(C*Math.pow((1+TN/m),n));
     }
-    public float valorFuturoEfectivo(float C,float TEP,int nTras, int nTEP){
+    public float valorFuturoEfectivo(float C,float TEP,long nTras, long nTEP){
 
         if(TEP > 1){
             TEP = TEP/100;
         }
-        return (float)(C*Math.pow(1+TEP,nTras/nTEP));
+        return (float)(C*Math.pow(1+TEP,(float)nTras/nTEP));
     }
-    public float getN(Tasa tasa){
+    public float getN(Tasa tasa,Deuda deuda,LocalDateTime date){
+        LocalDate dateBefore = deuda.getFecha().toLocalDate().minusMonths(1);
+        LocalDate dateAfter = date.toLocalDate();
+//        System.out.println(dateBefore);
+//        System.out.println(dateAfter);
+        long daysBetween = DAYS.between(dateBefore, dateAfter);
+        long daysBetweenFecha = DAYS.between(dateBefore, deuda.getFecha().toLocalDate());
+
         float n ;
-        if(tasa.getPeriodoCapitalizacion() == 0){
-            n= 30;
-        }else if(tasa.getPeriodoCapitalizacion()==1){
+        //diaria
+        if(tasa.getPeriodo() == 0){
+            n= (float)(daysBetween);
+        }else if(tasa.getPeriodo()==1){
             n= 4;
-        }else if(tasa.getPeriodoCapitalizacion()==2){
-            n= 2;
-        }else if(tasa.getPeriodoCapitalizacion()==3){
-            n= 1;
+        }else if(tasa.getPeriodo()==2){
+            n= (float)(daysBetween)/15;
+        }else if(tasa.getPeriodo()==3){
+            n= ((float)(daysBetween)/daysBetweenFecha);
+
+            System.out.println("dbet "+n);
         }
-        else if(tasa.getPeriodoCapitalizacion()==4){
-            n= 1/2;
+        else if(tasa.getPeriodo()==4){
+            n= (float)(daysBetween)/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+
         }
-        else if(tasa.getPeriodoCapitalizacion()==5){
-           n= 1/3;
+        else if(tasa.getPeriodo()==5){
+            n= (float)(daysBetween)/DAYS.between(dateBefore, dateBefore.plusMonths(3));
         }
-        else if(tasa.getPeriodoCapitalizacion()==6){
-            n= 1/4;
+        else if(tasa.getPeriodo()==6){
+            n= (float)(daysBetween)/DAYS.between(dateBefore, dateBefore.plusMonths(4));
         }
-        else if(tasa.getPeriodoCapitalizacion()==7){
-            n= 1/6;
+        else if(tasa.getPeriodo()==7){
+            n= (float)(daysBetween)/DAYS.between(dateBefore, dateBefore.plusMonths(6));
         }else {
-            n= 1/12;
+            n= (float)(daysBetween)/DAYS.between(dateBefore, dateBefore.plusMonths(12));
         }
+
+
 
         return n;
     }
-    public float getM(float n , Tasa tasa){
+    public float getM(float n , Tasa tasa,Deuda deuda,LocalDateTime date){
         float m;
+        LocalDate dateBefore = deuda.getFecha().toLocalDate().minusMonths(1);
+        LocalDate dateAfter = date.toLocalDate();
+//        System.out.println(dateBefore);
+//        System.out.println(dateAfter);
+        long daysBetween = DAYS.between(dateBefore, dateAfter);
 
+
+        //diario
         if(tasa.getPeriodo() == 0){
-            m= n * 1/30;
-        }else if(tasa.getPeriodo()==1){
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = 1;
+            }if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 15;
+            }if(tasa.getPeriodoCapitalizacion() == 3){
+                m =  DAYS.between(dateBefore, dateBefore.plusMonths(1));
+            }if(tasa.getPeriodoCapitalizacion() == 4 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(2));
+            }if(tasa.getPeriodoCapitalizacion() == 5){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(3));
+            }if(tasa.getPeriodoCapitalizacion() == 6 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(4));
+            }if(tasa.getPeriodoCapitalizacion() == 7){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(6));
+            }else{
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(12));
+            }
+
+
+
+        }
+        //semanal
+        else if(tasa.getPeriodo()==1){
             m = n * 1/4;
-        }else if(tasa.getPeriodo()==2){
-            m = n * 1/2;
-        }else if(tasa.getPeriodo()==3){
-            m = n * 1;
         }
+        //quincenal
+        else if(tasa.getPeriodo()==2){
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = 15;
+            }if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 1;
+            }if(tasa.getPeriodoCapitalizacion() == 3){
+                //m =    15/DAYS.between(dateBefore, dateBefore.plusMonths(1));
+                m = 1/2 ;
+            }if(tasa.getPeriodoCapitalizacion() == 4 ){
+                //m = 15/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=1/4;
+            }if(tasa.getPeriodoCapitalizacion() == 5){
+                //m = 15/DAYS.between(dateBefore, dateBefore.plusMonths(3));
+                m= 1/6;
+            }if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m = 15/DAYS.between(dateBefore, dateBefore.plusMonths(4));
+                m=1/8;
+            }if(tasa.getPeriodoCapitalizacion() == 7){
+                //m = 15/DAYS.between(dateBefore, dateBefore.plusMonths(6));
+                m=1/12;
+            }else{
+                //m = 15/DAYS.between(dateBefore, dateBefore.plusMonths(12));
+                m=1/24;
+            }
+
+        }
+        //mensual
+        else if(tasa.getPeriodo()==3){
+
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(1));
+            }else if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }else if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 2;
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(1))/15;
+            }else if(tasa.getPeriodoCapitalizacion() == 3){
+
+                m = 1 ;
+            }else if(tasa.getPeriodoCapitalizacion() == 4 ){
+                //m =DAYS.between(dateBefore, dateBefore.plusMonths(1))/ DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=1/2;
+            }else if(tasa.getPeriodoCapitalizacion() == 5){
+                //m =DAYS.between(dateBefore, dateBefore.plusMonths(1)) /DAYS.between(dateBefore, dateBefore.plusMonths(3));
+                m= 1/3;
+            }else if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m =DAYS.between(dateBefore, dateBefore.plusMonths(1))/ DAYS.between(dateBefore, dateBefore.plusMonths(4));
+                m=1/4;
+            }else if(tasa.getPeriodoCapitalizacion() == 7){
+                //m =DAYS.between(dateBefore, dateBefore.plusMonths(1))/ DAYS.between(dateBefore, dateBefore.plusMonths(6));
+                m=1/6;
+            }else{
+                //m =DAYS.between(dateBefore, dateBefore.plusMonths(1))/ DAYS.between(dateBefore, dateBefore.plusMonths(12));
+                m=1/12;
+            }
+        }
+        //bimestral
         else if(tasa.getPeriodo()==4){
-            m = n * 2;
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(2));
+            }if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 4;
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(1))/15;
+            }if(tasa.getPeriodoCapitalizacion() == 3){
+                // m = DAYS.between(dateBefore, dateBefore.plusMonths(2))/DAYS.between(dateBefore, dateBefore.plusMonths(1));
+                m = 2 ;
+            }if(tasa.getPeriodoCapitalizacion() == 4 ){
+                // m = DAYS.between(dateBefore, dateBefore.plusMonths(2))/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=1;
+            }if(tasa.getPeriodoCapitalizacion() == 5){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(2))/DAYS.between(dateBefore, dateBefore.plusMonths(3));
+                m= 2/3;
+            }if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(2))/DAYS.between(dateBefore, dateBefore.plusMonths(4));
+                m=1/2;
+            }if(tasa.getPeriodoCapitalizacion() == 7){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(2))/DAYS.between(dateBefore, dateBefore.plusMonths(6));
+                m=2/6;
+            }else{
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(2))/DAYS.between(dateBefore, dateBefore.plusMonths(12));
+                m=2/12;
+            }
         }
+        //trimestral
         else if(tasa.getPeriodo()==5){
-            m = n * 3;
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(3));
+            }if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }//quincenal
+            if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 6;
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/15;
+            }if(tasa.getPeriodoCapitalizacion() == 3){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/DAYS.between(dateBefore, dateBefore.plusMonths(1));
+                m = 3 ;
+            }if(tasa.getPeriodoCapitalizacion() == 4 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=3/2;
+            }if(tasa.getPeriodoCapitalizacion() == 5){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/DAYS.between(dateBefore, dateBefore.plusMonths(3));
+                m= 3/3;
+            }if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/DAYS.between(dateBefore, dateBefore.plusMonths(4));
+                m=3/4;
+            }if(tasa.getPeriodoCapitalizacion() == 7){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/DAYS.between(dateBefore, dateBefore.plusMonths(6));
+                m=3/6;
+            }else{
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(3))/DAYS.between(dateBefore, dateBefore.plusMonths(12));
+                m=3/12;
+            }
         }
+        //cuatrimestral
         else if(tasa.getPeriodo()==6){
-            m = n * 4;
+            //diario
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(4));
+            }//NOT
+            if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }//quincenal
+            if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 8;
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/15;
+            }//mensual
+            if(tasa.getPeriodoCapitalizacion() == 3){
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/DAYS.between(dateBefore, dateBefore.plusMonths(1));
+                m = 4 ;
+            }//bimestral
+            if(tasa.getPeriodoCapitalizacion() == 4 ){
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=4/2;
+            }//trimetral
+            if(tasa.getPeriodoCapitalizacion() == 5){
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/DAYS.between(dateBefore, dateBefore.plusMonths(3 ));
+                m= 4/3;
+            }//cuatrimestral
+            if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/DAYS.between(dateBefore, dateBefore.plusMonths(4 ));
+                m=4/4;
+            }//semestral
+             if(tasa.getPeriodoCapitalizacion() == 7){
+                 //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/DAYS.between(dateBefore, dateBefore.plusMonths(6 ));
+                m=4/6;
+            }else{
+                 //m =   DAYS.between(dateBefore, dateBefore.plusMonths(4))/DAYS.between(dateBefore, dateBefore.plusMonths(12 ));
+                m=4/12;
+            }
         }
+        //semestral
         else if(tasa.getPeriodo()==7){
-            m = n * 6;
-        }else {
-            m = n * 12;
+            //diario
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(6));
+            }//NOT
+            if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }//quincenal
+            if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 12;
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(6))/15;
+            }//mensual
+            if(tasa.getPeriodoCapitalizacion() == 3){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(6))/DAYS.between(dateBefore, dateBefore.plusMonths(1));
+                m = 6 ;
+            }//bimestral
+            if(tasa.getPeriodoCapitalizacion() == 4 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(6))/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=6/2;
+            }//trimetral
+            if(tasa.getPeriodoCapitalizacion() == 5){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(6))/DAYS.between(dateBefore, dateBefore.plusMonths(3));
+                m= 6/3;
+            }//cuatrimestral
+            if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(6))/DAYS.between(dateBefore, dateBefore.plusMonths(4));
+                m=6/4;
+            }//semestral
+            if(tasa.getPeriodoCapitalizacion() == 7){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(6))/DAYS.between(dateBefore, dateBefore.plusMonths(6));
+                m=6/6;
+            }else{
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(6))/DAYS.between(dateBefore, dateBefore.plusMonths(12));
+                m=6/12;
+            }
+        }
+        //anual
+        else {
+            //diario
+            if(tasa.getPeriodoCapitalizacion() == 0 ){
+                m = DAYS.between(dateBefore, dateBefore.plusMonths(12));
+            }//NOT
+            if(tasa.getPeriodoCapitalizacion() == 1 ){
+                m = 00000;
+            }//quincenal
+            if(tasa.getPeriodoCapitalizacion() == 2 ){
+                m = 24;
+                //m =   DAYS.between(dateBefore, dateBefore.plusMonths(12))/15;
+            }//mensual
+            if(tasa.getPeriodoCapitalizacion() == 3){
+//m = DAYS.between(dateBefore, dateBefore.plusMonths(12))/DAYS.between(dateBefore, dateBefore.plusMonths(1));
+                m = 12 ;
+            }//bimestral
+            if(tasa.getPeriodoCapitalizacion() == 4 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(12))/DAYS.between(dateBefore, dateBefore.plusMonths(2));
+                m=12/2;
+            }//trimetral
+            if(tasa.getPeriodoCapitalizacion() == 5){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(12))/DAYS.between(dateBefore, dateBefore.plusMonths(3));
+                m= 12/3;
+            }//cuatrimestral
+            if(tasa.getPeriodoCapitalizacion() == 6 ){
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(12))/DAYS.between(dateBefore, dateBefore.plusMonths(4));
+                m=12/4;
+            }//semestral
+            if(tasa.getPeriodoCapitalizacion() == 7){
+                ///m = DAYS.between(dateBefore, dateBefore.plusMonths(12))/DAYS.between(dateBefore, dateBefore.plusMonths(6));
+                m=12/6;
+            }else{
+                //m = DAYS.between(dateBefore, dateBefore.plusMonths(12))/DAYS.between(dateBefore, dateBefore.plusMonths(12));
+                m=12/12;
+            }
         }
 
         return m;
     }
-    public float generateInterest(Deuda deuda,Tasa tasa){
-        System.out.println(tasa.getTipo());
+    public float genInterest(Deuda deuda,Tasa tasa,LocalDateTime date){
+
+        LocalDate dateBefore = deuda.getFecha().toLocalDate().minusMonths(1);
+        LocalDate dateAfter = date.toLocalDate();
+//       System.out.println(dateBefore);
+//        System.out.println(dateAfter);
+        long daysBetween = DAYS.between(dateBefore, dateAfter);
+        long daysBetweenFecha = DAYS.between(dateBefore, deuda.getFecha().toLocalDate());
+        System.out.println ("Days: " + daysBetween);
 
         //Simple
         if(tasa.getTipo()== 0){
             float t ;
             if(tasa.getPeriodo() == 0){
-                t= 30;
+                t= daysBetween;
             }else if(tasa.getPeriodo()==1){
                 t= 4;
             }else if(tasa.getPeriodo()==2){
-                t= 2;
+                t= daysBetween/15;
             }else if(tasa.getPeriodo()==3){
-                t= 1;
+                t= daysBetween/daysBetweenFecha;
             }
             else if(tasa.getPeriodo()==4){
-                t= 1/2;
+                t= daysBetween/DAYS.between(dateBefore, dateBefore.plusMonths(2));
             }
             else if(tasa.getPeriodo()==5){
-                t= 1/3;
+                t= daysBetween/DAYS.between(dateBefore, dateBefore.plusMonths(3));
             }
             else if(tasa.getPeriodo()==6){
-                t= 1/4;
+                t= daysBetween/DAYS.between(dateBefore, dateBefore.plusMonths(4));
             }
             else if(tasa.getPeriodo()==7){
-                t= 1/6;
+                t= daysBetween/DAYS.between(dateBefore, dateBefore.plusMonths(6));
             }else {
-                t= 1/12;
+                t= daysBetween/DAYS.between(dateBefore, dateBefore.plusMonths(12));
             }
 
             return valorFuturoSimple(deuda.getMonto(),tasa.getMonto(),t)-deuda.getMonto();
-        }//Nominal
+        }
+        //Nominal
         else if(tasa.getTipo()==1){
 
             float m , n;
-            n  =this.getN(tasa);
-            m  =this.getM(n,tasa);
+            n  =this.getN(tasa,deuda,date);
+            m  =this.getM(n,tasa,deuda,date);
 
             System.out.println("MONTO DEUDA: "+deuda.getMonto());
             System.out.println("MONTO TASA: "+tasa.getMonto());
@@ -278,43 +536,49 @@ public class DeudaService {
             System.out.println("type tasa:" + tasa.getPeriodo());
             System.out.println("N: " + n);
             System.out.println("M: "+m);
+
             return valorFuturoCompuesto(deuda.getMonto(),tasa.getMonto(),m,n)-deuda.getMonto();
-        }//Efectiva
+        }
+        //Efectiva
         else{
-            int days;
+            long days;
 
             if(tasa.getPeriodo() == 0){
                 days =1;
             }else if(tasa.getPeriodo()==1){
-                days =7;
+                days =000000000;
             }else if(tasa.getPeriodo()==2){
                 days =15;
             }else if(tasa.getPeriodo()==3){
-                days =30;
+                days = DAYS.between(dateBefore,dateBefore.plusMonths(1));
+
             }
             else if(tasa.getPeriodo()==4){
-                days =60;
+                days = DAYS.between(dateBefore,dateBefore.plusMonths(2));
             }
             else if(tasa.getPeriodo()==5){
-                days =90;
+                days = DAYS.between(dateBefore,dateBefore.plusMonths(3));
             }
             else if(tasa.getPeriodo()==6){
-                days =120;
+                days = DAYS.between(dateBefore,dateBefore.plusMonths(4));
             }
             else if(tasa.getPeriodo()==7){
-                days =180;
+                days = DAYS.between(dateBefore,dateBefore.plusMonths(6));
             }else {
-                days =360;
+                days = DAYS.between(dateBefore,dateBefore.plusMonths(12));
             }
 
 
-            return valorFuturoEfectivo(deuda.getMonto(),tasa.getMonto(),30,days)-deuda.getMonto();
+            return valorFuturoEfectivo(deuda.getMonto(),tasa.getMonto(),daysBetween,days)-deuda.getMonto();
         }
     }
 
-    public void updateDeudaInteres(Deuda deuda,Tasa tasa){
-        deuda.setInteres(Math.round(generateInterest(deuda,tasa)*100f)/100f);
-        deudaRepository.save(deuda);
+    public void updateDeudaInteres(Deuda deuda, Tasa tasa, LocalDateTime date){
+
+        deuda.setInteres(Math.round(genInterest(deuda,tasa,date)*100f)/100f);
+
+        System.out.println("Interes generado: "+deuda.getInteres());
+        //deudaRepository.save(deuda);
     }
 
     public void updateDeuda(Deuda deuda){

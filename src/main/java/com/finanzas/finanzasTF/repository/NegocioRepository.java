@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface NegocioRepository extends JpaRepository<Negocio,Integer > {
-    Negocio findOneNegocioByRUC(Integer RUC);
+    Negocio findOneNegocioByRUC(Long RUC);
     Negocio findOneNegocioByPerfil_id(Integer perfil_id);
 
 
@@ -19,7 +19,7 @@ public interface NegocioRepository extends JpaRepository<Negocio,Integer > {
     @Query(value = "SELECT EXISTS (SELECT * FROM negocios n WHERE  (n.ruc = :ruc) )",
             nativeQuery = true)
     Boolean existsRUC(
-            @Param("ruc") Integer ruc);
+            @Param("ruc") Long ruc);
 
     @Query(value = "SELECT EXISTS (SELECT * FROM negocios n WHERE  (LOWER(n.codigo) = LOWER(:codigo)) )",
             nativeQuery = true)

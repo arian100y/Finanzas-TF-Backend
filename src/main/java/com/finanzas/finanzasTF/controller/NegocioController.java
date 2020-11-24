@@ -27,9 +27,10 @@ public class NegocioController {
         return negocioService.getAllNegocios();
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<? >  addNegocio(@RequestBody Negocio negocio){
-
+        System.out.println("testing");
+        
         return negocioService.addNegocio(negocio);
     }
 
@@ -53,7 +54,7 @@ public class NegocioController {
     }
 
     @GetMapping("/RUC={RUC}")
-    public Negocio getNegocioByRUC(@PathVariable("RUC") Integer RUC){
+    public Negocio getNegocioByRUC(@PathVariable("RUC") Long RUC){
         return negocioService.getNegocioByRUC(RUC);
     }
 

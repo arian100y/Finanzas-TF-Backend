@@ -69,6 +69,7 @@ public class DeudaController {
 
     @GetMapping("/mora")
     public void generateMora(){
+        generate();
         clienteService.simulateMora();
     }
 }

@@ -165,7 +165,7 @@ public class ClienteService {
     }
 
     public void checkMora() {
-        List<Cliente> clientes = new ArrayList<>(clienteRepository.findAll());
+        List<Cliente> clientes = clienteRepository.findAll();
         LocalDateTime currentDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
         Integer daysCurrent = Integer.parseInt(currentDate.format(formatter));
@@ -178,11 +178,14 @@ public class ClienteService {
     }
 
     public void simulateMora() {
-        List<Cliente> clientes = new ArrayList<>(clienteRepository.findAll());
+        List<Cliente> clientes = clienteRepository.findAll();
         for (Cliente cliente : clientes){
             Deuda lastDeuda = getLastDeuda(cliente);
-            lastDeuda.setHayMora(true);
-            deudaRepository.save(lastDeuda);
+            if (lastDeuda.getMonto() > 0.0f)
+            {
+                lastDeuda.setHayMora(true);
+                deudaRepository.save(lastDeuda);
+            }
         }
     }
 

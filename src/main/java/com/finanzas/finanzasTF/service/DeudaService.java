@@ -81,7 +81,7 @@ public class DeudaService {
             if(ded.getFecha() != null){
                 if(ded.getFecha().getMonthValue() +1 % 11 == currentDate.getMonthValue()){
                     if(ded.getFecha().getDayOfMonth() == currentDate.getDayOfMonth()){
-                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true, false, 0.0f);
+                        Deuda newDeuda = new Deuda(null,ded.getCliente_id(),currentDate,0.0f,0.0f,true, false);
                         deudaRepository.save(newDeuda);
                     }
                 }
@@ -110,7 +110,7 @@ public class DeudaService {
                     //generate interest?!??
                     Deuda newDeuda = new Deuda(null,lastDeuda.getCliente_id(),
                             currentDate,0.0f,0.0f,true,
-                            false, 0.0f);
+                            false);
                     deudaRepository.save(newDeuda);
 
                 }
@@ -142,7 +142,7 @@ public class DeudaService {
 
            Deuda newDeuda = new Deuda(null,cliente.getId(),
                         newDate,0.0f,0.0f,true,
-                          false,0.0f);
+                          false);
 
            deudaRepository.save(newDeuda);
 
